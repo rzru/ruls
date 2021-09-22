@@ -2,6 +2,7 @@ use reader::Reader;
 use std::env;
 mod reader;
 mod arguments;
+mod writer;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
