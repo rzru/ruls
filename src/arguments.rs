@@ -1,33 +1,53 @@
-use std::fs;
-use std::io;
-use std::io::Write;
-use std::fs::DirEntry;
+use std::collections::HashMap;
 
-pub struct Reader;
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum Argument {
+    ShowAll
+}
 
-impl Reader {
-    pub fn read(path: &str) -> () {
-        if let Ok(entries) = fs::read_dir(path) {
-            let mut dir_entries: Vec<DirEntry> = vec![];
-            for entry in entries {
-                if let Ok(entry) = entry {
-                    dir_entries.push(entry);
-                }
-            }
+#[derive(Debug)]
+pub struct Arguments {
+    data: Vec<Argument>
+}
 
-            dir_entries.sort_by(|a, b| a.file_name().cmp(&b.file_name()));
+impl Arguments {
+    pub fn data(&self) -> &Vec<Argument> {
+        &self.data
+    }
 
-            for entry in dir_entries {
-                match entry.file_name().to_str() {
-                    Some(file_name) => {
-                        if !file_name.starts_with('.') {
-                            print!("{} ", file_name);
-                        }
-                        io::stdout().flush().unwrap();
-                    }
+    fn prepare_arguments() -> HashMap<String, Argument> {
+        let mut arguments_mapping = HashMap::new();
+        arguments_mapping.insert("a".to_string(), Argument::ShowAll);
+        arguments_mapping.insert("all".to_string(), Argument::ShowAll);
+
+        arguments_mapping
+    }
+}
+
+impl From<Vec<String>> for Arguments {
+    fn from(vec: Vec<String>) -> Self {
+        let mut data: Vec<Argument> = vec![];
+        let args_map = Arguments::prepare_arguments();
+        for arg in vec {
+            if arg.starts_with("--") {
+                match args_map.get(&arg[2..].to_string()) {
+                    Some(map_arg) => data.push(map_arg.clone()),
                     None => {}
                 }
+                continue;
             }
+            if arg.starts_with('-') {
+                for str in arg[1..].split("") {
+                    match args_map.get(&str.to_string()) {
+                        Some(map_arg) => data.push(map_arg.clone()),
+                        None => {}
+                    }
+                }
+            }
+        }
+
+        Arguments {
+            data
         }
     }
 }
