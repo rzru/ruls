@@ -1,8 +1,7 @@
 use std::fs;
-use std::io;
-use std::io::Write;
-use std::fs::DirEntry;
-use super::arguments::{Arguments, Argument};
+use std::fs::{DirEntry};
+use super::arguments::{Arguments};
+use super::writer::Writer;
 
 pub struct Reader;
 
@@ -17,18 +16,7 @@ impl Reader {
             }
 
             dir_entries.sort_by(|a, b| a.file_name().cmp(&b.file_name()));
-
-            for entry in dir_entries {
-                match entry.file_name().to_str() {
-                    Some(file_name) => {
-                        if !file_name.starts_with('.') || args.data().contains(&Argument::ShowAll) {
-                            print!("{} ", file_name);
-                        }
-                        io::stdout().flush().unwrap();
-                    }
-                    None => {}
-                }
-            }
+            Writer::write(&dir_entries, &args);
         }
     }
 }
