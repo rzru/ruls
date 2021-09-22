@@ -1,7 +1,7 @@
 use std::fs;
 use std::fs::{DirEntry};
 use super::arguments::{Arguments};
-use super::writer::Writer;
+use super::processor::Processor;
 
 pub struct Reader;
 
@@ -16,7 +16,7 @@ impl Reader {
             }
 
             dir_entries.sort_by(|a, b| a.file_name().cmp(&b.file_name()));
-            Writer::write(&dir_entries, &args);
+            Processor::process(&dir_entries, &args);
         }
     }
 }
