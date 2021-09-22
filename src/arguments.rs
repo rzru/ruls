@@ -30,17 +30,15 @@ impl From<Vec<String>> for Arguments {
         let args_map = Arguments::prepare_arguments();
         for arg in vec {
             if arg.starts_with("--") {
-                match args_map.get(&arg[2..].to_string()) {
-                    Some(map_arg) => data.push(map_arg.clone()),
-                    None => {}
+                if let Some(map_arg) = args_map.get(&arg[2..].to_string()) {
+                    data.push(map_arg.clone())
                 }
                 continue;
             }
             if arg.starts_with('-') {
                 for str in arg[1..].split("") {
-                    match args_map.get(&str.to_string()) {
-                        Some(map_arg) => data.push(map_arg.clone()),
-                        None => {}
+                    if let Some(map_arg) = args_map.get(&str.to_string()) {
+                        data.push(map_arg.clone())
                     }
                 }
             }

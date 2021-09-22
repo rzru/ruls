@@ -4,11 +4,11 @@ mod reader;
 mod arguments;
 mod processor;
 mod printer;
+mod path_buf;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let default_path = String::from(".");
-    let mut path = default_path;
+    let mut path = String::from(".");
 
     if let Some(first_arg) = args.get(1) {
         if !first_arg.starts_with('-') {
@@ -16,5 +16,5 @@ fn main() {
         }
     }
 
-    Reader::read(path, args.into());
+    Reader::read(path, args.into())
 }
