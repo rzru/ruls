@@ -3,6 +3,7 @@ use std::fs::{DirEntry};
 use super::arguments::{Arguments, Argument};
 use is_executable::IsExecutable;
 use crate::printer::{Printer, Print};
+use super::path_buf::ExtendPathInfo;
 
 pub struct Processor;
 
@@ -19,6 +20,12 @@ impl Processor {
                         printer.print_dir(file_name);
                     } else if path.is_executable() {
                         printer.print_exec(file_name);
+                    } else if path.is_symlink_local() {
+                        printer.print_symlink(file_name);
+                    } else if path.is_image() {
+                        printer.print_image(file_name);
+                    } else if path.is_archive() {
+                        printer.print_archive(file_name)
                     } else {
                         printer.default_print(file_name);
                     }

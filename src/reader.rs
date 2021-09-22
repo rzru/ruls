@@ -17,6 +17,8 @@ impl Reader {
 
             dir_entries.sort_by(|a, b| a.file_name().cmp(&b.file_name()));
             Processor::process(&dir_entries, &args);
+        } else {
+            println!("Error: not a directory")
         }
     }
 }
