@@ -1,20 +1,15 @@
-use reader::Reader;
 use std::env;
-mod reader;
-mod arguments;
-mod processor;
-mod printer;
-mod path_buf;
+use ruls::{run, Config};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let mut path = String::from(".");
+    let mut path = ".";
 
     if let Some(first_arg) = args.get(1) {
         if !first_arg.starts_with('-') {
-            path = first_arg.to_string()
+            path = first_arg
         }
     }
 
-    Reader::read(path, args.into())
+    run(Config::new(path, (&args).into()))
 }
