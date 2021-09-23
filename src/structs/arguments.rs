@@ -24,8 +24,8 @@ impl Arguments {
     }
 }
 
-impl From<Vec<String>> for Arguments {
-    fn from(vec: Vec<String>) -> Self {
+impl From<&Vec<String>> for Arguments {
+    fn from(vec: &Vec<String>) -> Self {
         let mut data: Vec<Argument> = vec![];
         let args_map = Arguments::prepare_arguments();
         for arg in vec {
